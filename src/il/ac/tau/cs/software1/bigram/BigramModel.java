@@ -1,7 +1,12 @@
 package il.ac.tau.cs.software1.bigram;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Locale;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 public class BigramModel {
     public static final int MAX_VOCABULARY_SIZE = 14500;
@@ -79,9 +84,45 @@ public class BigramModel {
      * @post: mBigramCounts = prev(mBigramCounts)
      */
     public String[] buildVocabularyIndex(String fileName) throws IOException { // Question 1
-        // TODO: implement
-        return null;
-    }
+        int i = 0;
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        String line = null;
+        String[] res = new String[MAX_VOCABULARY_SIZE];
+        while( (line = reader.readLine()) != null) {
+            String[] tokens = line.split("\\s+");
+            for (String word : tokens) {
+                if (i == MAX_VOCABULARY_SIZE){
+                    reader.close();
+                    return res;
+                }
+                String w = normalizeWord(word);
+                if( w == null) {
+                    continue;
+                }
+                if((findIndex(res, w)) != -1) {
+                    continue;
+                }
+                else {
+                    res[i] = w;
+                    i += 1;
+                }
+            }
+        }
+        
+        reader.close();
+
+        if (i == MAX_VOCABULARY_SIZE){
+                    return res;
+                }
+        else {
+            String[] result = new String[i];
+            for( int j = 0 ; j < i ; j++ ) {
+                result[j] = res[j];
+            }
+            return result;
+        
+            }
+        }
 
     /*
      * @post: mVocabulary = prev(mVocabulary)

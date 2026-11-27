@@ -1,40 +1,53 @@
 package il.ac.tau.cs.software1.inventory;
 
+import javax.naming.InitialContext;
+
 /*
  * A simple array-based Inventory (Question 6).
  */
 public class NaiveInventory implements Inventory {
 
 	private static final int INITIAL_CAPACITY = 100;
-
-	// TODO: add the fields:
-	//       - an array of Collectibles (it may be larger than the number of items actually stored)
-	//       - an int that counts how many items are actually stored
+	private Collectible[] items;
+	private int count;
 
 	public NaiveInventory() {
-		// TODO: implement
+		this.items = new Collectible[INITIAL_CAPACITY];
+		this.count = 0;
 	}
-
+	
 	@Override
 	public void collect(Collectible collectible) {
-		// TODO: implement
+		if(count == items.length) {
+			Collectible[] new_items = new Collectible[2 * (items.length)];
+			for( int i = 0 ; i < items.length ; i ++) {
+				new_items[i] = items[i];
+			}
+			items = new_items;
+		}
+
+		items[count] = collectible;
+		count ++;
+
 	}
+
 
 	@Override
 	public float getTotalWeight() {
-		// TODO: implement
-		return 0.f;
+		float res = 0;
+		for(int i = 0 ; i < count ; i++) {
+			res += items[i].getWeight();
+		}
+		return res;
 	}
 
 	@Override
 	public int getCurrentCount() {
-		// TODO: implement
-		return 0;
+		return count;
 	}
 
 	// Returns the array of Collectibles that is stored in the field of this class
 	public Collectible[] getCollArr() {
-		// TODO: implement
-		return null;
+		return items;
 	}
 }

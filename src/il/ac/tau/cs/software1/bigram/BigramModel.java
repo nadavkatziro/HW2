@@ -180,9 +180,34 @@ public class BigramModel {
     /*
      * @pre: fileName is a legal file path
      */
-    public void loadModel(String fileName) throws IOException { // Question 4
-        // TODO: implement
-    }
+    public void loadModel(String fileName) throws IOException {
+        BufferedReader voReader = new BufferedReader(new FileReader(fileName + VOC_FILE_SUFFIX));
+        String firstline = voReader.readLine();
+        int vocSize = Integer.parseInt(firstline.split("\\s+")[0]);
+
+        mVocabulary = new String[vocSize];
+        mBigramCounts = new int[vocSize][vocSize];
+
+        String line = null;
+        while ((line = voReader.readLine()) != null) {
+            String[] parts = line.split(",");
+            int index = Integer.parseInt(parts[0]);
+            mVocabulary[index] = parts[1];
+        }
+        voReader.close();
+
+        BufferedReader countReader = new BufferedReader(new FileReader(fileName + COUNTS_FILE_SUFFIX));
+        while ((line = countReader.readLine()) != null) {
+            String[] parts = line.split("[,:]");
+            int i = Integer.parseInt(parts[0]);
+            int j = Integer.parseInt(parts[1]);
+            int count = Integer.parseInt(parts[2]);
+            mBigramCounts[i][j] = count;
+            }
+
+        countReader.close();
+        }
+
 
     /*
      * @pre: sentence is in lowercase

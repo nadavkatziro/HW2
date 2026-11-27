@@ -215,10 +215,37 @@ public class BigramModel {
      * @pre: each two words in the sentence are separated with a single space
      * @post: if sentence is probable, according to the model, $ret = true, else, $ret = false
      */
-    public boolean isLegalSentence(String sentence) { // Question 5
-        // TODO: implement
-        return false;
-    }
+    public boolean isLegalSentence(String sentence) {
+        if (sentence.isEmpty()) {
+            return true;
+        }
+
+        String[] s1 = sentence.split(" ");
+        if((s1.length) == 1) {
+            if((getWordIndex(s1[0])) != (-1)) {
+                return true;
+            }
+            return false;
+        }
+        else {
+            for(int i = 0 ; i < (s1.length - 1) ; i++) {
+                int idx1 = getWordIndex(s1[i]);
+                int idx2 = getWordIndex(s1[i+1]);
+                if (idx1 == -1 || idx2 == -1 || mBigramCounts[idx1][idx2] == 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        }
+    
+
+
+
+
+
+
+
 
     ///////////////////////////////////////////////////////////////////////////
     // Queries on the model - already implemented for you.

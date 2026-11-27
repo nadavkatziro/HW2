@@ -19,7 +19,6 @@ public class PacmanBonusDot extends PacmanBonus {
 
 	@Override
 	public float getPrice() {
-		// TODO: implement
 		return 12.0f;
 	}
 }

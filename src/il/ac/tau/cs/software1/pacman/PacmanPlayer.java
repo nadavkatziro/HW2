@@ -10,8 +10,9 @@ public class PacmanPlayer extends PacmanGameObject {
 		
 	protected int score = 0;
 	
-	// TODO (Question 9): add a private field of type InventoryComponent, and initialize it
+	private InventoryComponent inventorycomponent = new InventoryComponent();
 	
+
 	public PacmanPlayer(PacmanGridComponent initialPosition) {
 		super(initialPosition);
 		imageComponent = new ImageComponent("player");
@@ -31,8 +32,7 @@ public class PacmanPlayer extends PacmanGameObject {
 	
 	@Override
 	public void onHit(GameObject other) {
-		// No matter what, stop moving in a penetrating direction
-		// After making a step and entering into collision, return one step back - and stop moving		
+				
 		if (other instanceof PacmanObstacle) {
 			velocityComponent.velocity.x *= -1.f;
 			velocityComponent.velocity.y *= -1.f;
@@ -42,21 +42,22 @@ public class PacmanPlayer extends PacmanGameObject {
 		
 		else if (other instanceof PacmanBonus) {
 			PacmanBonus bonus = (PacmanBonus) other;
-			
-			// TODO (Question 9): replace the two lines below.
-			// Instead of eating (destroying) the bonus, the player should stash it in the inventory,
-			// but only if it is not too heavy to carry. See the assignment for the exact rules.
-			addScore(bonus.bonusScore);
-			other.destroy();
-			
-			// Hint: every PacmanBonus is also a Collectible
 			Collectible collectible = (Collectible) other;
+
+			if(inventorycomponent.getInventory().getTotalWeight() + collectible.getWeight() <= inventorycomponent.getMaxWeight()){
+				bonus.getTransformComponent().position = inventorycomponent.getInventoryPosition();
+				inventorycomponent.getInventory().collect(collectible);
+				addScore(bonus.bonusScore);
+			}
 		}
 	}
+
+
+
+
 	
 	public InventoryComponent getInventoryComponent() {
-		// TODO (Question 9): return the InventoryComponent field
-		return null;
+		return this.inventorycomponent;
 	}
 	
 	public void addScore(int bonus) {
